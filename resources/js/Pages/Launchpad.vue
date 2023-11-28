@@ -4,12 +4,12 @@ import { Head } from "@inertiajs/vue3";
 </script>
 
 <template>
-  <Head title="Dashboard" />
+  <Head title="Launchpad" />
 
   <AuthenticatedLayout>
     <template #header>
       <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        Dashboard
+        Launchpad
       </h2>
     </template>
 
