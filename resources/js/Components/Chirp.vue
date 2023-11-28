@@ -4,6 +4,7 @@ import { ref } from "vue";
 import Dropdown from "@/Components/Dropdown.vue";
 import InputError from "@/Components/InputError.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
+import DropdownLink from "@/Components/DropdownLink.vue";
 
 const props = defineProps(["chirp"]);
 
@@ -73,6 +74,14 @@ const editing = ref(false);
             >
               Edit
             </button>
+
+            <DropdownLink
+              as="button"
+              :href="route('chirps.destroy', chirp.id)"
+              method="delete"
+            >
+              Delete
+            </DropdownLink>
           </template>
         </Dropdown>
       </div>
