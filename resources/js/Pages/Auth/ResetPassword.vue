@@ -1,10 +1,10 @@
 <script setup>
-import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
-import {Head, useForm} from '@inertiajs/vue3';
+import GuestLayout from "@/Layouts/GuestLayout.vue";
+import InputError from "@/Components/InputError.vue";
+import InputLabel from "@/Components/InputLabel.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import TextInput from "@/Components/TextInput.vue";
+import { Head, useForm } from "@inertiajs/vue3";
 
 const props = defineProps({
   email: {
@@ -20,24 +20,24 @@ const props = defineProps({
 const form = useForm({
   token: props.token,
   email: props.email,
-  password: '',
-  password_confirmation: '',
+  password: "",
+  password_confirmation: "",
 });
 
 const submit = () => {
-  form.post(route('password.store'), {
-    onFinish: () => form.reset('password', 'password_confirmation'),
+  form.post(route("password.store"), {
+    onFinish: () => form.reset("password", "password_confirmation"),
   });
 };
 </script>
 
 <template>
   <GuestLayout>
-    <Head title="Reset Password"/>
+    <Head title="Reset Password" />
 
     <form @submit.prevent="submit">
       <div>
-        <InputLabel for="email" value="Email"/>
+        <InputLabel for="email" value="Email" />
 
         <TextInput
           id="email"
@@ -49,11 +49,11 @@ const submit = () => {
           type="email"
         />
 
-        <InputError :message="form.errors.email" class="mt-2"/>
+        <InputError :message="form.errors.email" class="mt-2" />
       </div>
 
       <div class="mt-4">
-        <InputLabel for="password" value="Password"/>
+        <InputLabel for="password" value="Password" />
 
         <TextInput
           id="password"
@@ -64,11 +64,11 @@ const submit = () => {
           type="password"
         />
 
-        <InputError :message="form.errors.password" class="mt-2"/>
+        <InputError :message="form.errors.password" class="mt-2" />
       </div>
 
       <div class="mt-4">
-        <InputLabel for="password_confirmation" value="Confirm Password"/>
+        <InputLabel for="password_confirmation" value="Confirm Password" />
 
         <TextInput
           id="password_confirmation"
@@ -79,11 +79,14 @@ const submit = () => {
           type="password"
         />
 
-        <InputError :message="form.errors.password_confirmation" class="mt-2"/>
+        <InputError :message="form.errors.password_confirmation" class="mt-2" />
       </div>
 
       <div class="flex items-center justify-end mt-4">
-        <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+        <PrimaryButton
+          :class="{ 'opacity-25': form.processing }"
+          :disabled="form.processing"
+        >
           Reset Password
         </PrimaryButton>
       </div>
