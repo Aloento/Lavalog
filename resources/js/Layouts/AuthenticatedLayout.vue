@@ -75,8 +75,9 @@ const showingNavigationDropdown = ref(false);
 
                   <template #content>
                     <DropdownLink :href="route('profile.edit')">
-                      Profile</DropdownLink
-                    >
+                      Profile
+                    </DropdownLink>
+
                     <DropdownLink
                       :href="route('logout')"
                       as="button"
@@ -111,6 +112,7 @@ const showingNavigationDropdown = ref(false);
                     stroke-linejoin="round"
                     stroke-width="2"
                   />
+
                   <path
                     :class="{
                       hidden: !showingNavigationDropdown,
@@ -166,6 +168,7 @@ const showingNavigationDropdown = ref(false);
               <ResponsiveNavLink :href="route('profile.edit')">
                 Profile</ResponsiveNavLink
               >
+
               <ResponsiveNavLink
                 :href="route('logout')"
                 as="button"
