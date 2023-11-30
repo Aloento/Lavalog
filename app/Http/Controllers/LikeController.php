@@ -18,6 +18,8 @@ class LikeController extends Controller
 
   public function destroy(Chirp $chirp): RedirectResponse
   {
+    $this->authorize('delete', $chirp);
+
     $chirp->likes()->where('user_id', auth()->id())->delete();
 
     return back();
