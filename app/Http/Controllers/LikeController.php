@@ -24,8 +24,6 @@ class LikeController extends Controller
 
   public function destroy(Chirp $chirp)
   {
-    $this->authorize('delete', $chirp);
-
-    $chirp->likes()->where('user_id', auth()->id())->delete();
+    auth()->user()->likes()->where('chirp_id', $chirp->id)->delete();
   }
 }
