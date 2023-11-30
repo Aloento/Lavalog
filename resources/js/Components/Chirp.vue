@@ -14,12 +14,23 @@ const form = useForm({
 
 const editing = ref(false);
 const isLiked = ref(false);
+const likeCount = ref(0);
 
 onMounted(() => {
   axios
     .get(`/likes/${props.chirp.id}`)
     .then((response) => {
       isLiked.value = response.data.isLiked;
+      console.debug(response);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+
+  axios
+    .get(`/likes/${props.chirp.id}/count`)
+    .then((response) => {
+      likeCount.value = response.data.likeCount;
       console.debug(response);
     })
     .catch((error) => {
@@ -32,6 +43,7 @@ function like() {
     .post(`/likes`, { chirp_id: props.chirp.id })
     .then(() => {
       isLiked.value = true;
+      likeCount.value++;
     })
     .catch((error) => {
       console.error(error);
@@ -43,6 +55,7 @@ function unlike() {
     .delete(`/likes/${props.chirp.id}`)
     .then(() => {
       isLiked.value = false;
+      likeCount.value--;
     })
     .catch((error) => {
       console.error(error);
@@ -86,27 +99,31 @@ function unlike() {
           </small>
         </div>
 
-        <div class="flex gap-4">
-          <button @click="isLiked ? unlike() : like()">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6 text-red-500"
-              :fill="isLiked ? 'currentColor' : 'none'"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-              />
-            </svg>
-          </button>
+        <div class="flex gap-4 items-center">
+          <div class="flex">
+            <button @click="isLiked ? unlike() : like()">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6 text-red-500"
+                :fill="isLiked ? 'currentColor' : 'none'"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                />
+              </svg>
+            </button>
+
+            <span class="ml-2">{{ likeCount }}</span>
+          </div>
 
           <Dropdown v-if="chirp.user.id === $page.props.auth.user.id">
             <template #trigger>
-              <button>
+              <button class="mt-1">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   class="h-4 w-4 text-gray-400"

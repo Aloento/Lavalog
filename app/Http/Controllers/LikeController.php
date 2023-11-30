@@ -14,7 +14,13 @@ class LikeController extends Controller
     return response()->json(['isLiked' => $isLiked]);
   }
 
-  public function store(Request $request)
+  public function count(Chirp $chirp): JsonResponse
+  {
+      $likeCount = $chirp->likes()->count();
+      return response()->json(['likeCount' => $likeCount]);
+  }
+
+  public function store(Request $request): void
   {
     auth()->user()->likes()->create([
       'user_id' => auth()->id(),
@@ -22,7 +28,7 @@ class LikeController extends Controller
     ]);
   }
 
-  public function destroy(Chirp $chirp)
+  public function destroy(Chirp $chirp): void
   {
     auth()->user()->likes()->where('chirp_id', $chirp->id)->delete();
   }

@@ -24,6 +24,8 @@ Route::resource('chirps', ChirpController::class)
   ->only(['index', 'store', 'update', 'destroy'])
   ->middleware(['auth', 'verified']);
 
+Route::get('/likes/{chirp}/count', [LikeController::class, 'count']);
+
 Route::resource('likes', LikeController::class, [
   'parameters' => [
     'likes' => 'chirp',
