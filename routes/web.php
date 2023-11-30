@@ -24,7 +24,10 @@ Route::resource('chirps', ChirpController::class)
   ->only(['index', 'store', 'update', 'destroy'])
   ->middleware(['auth', 'verified']);
 
-Route::resource('likes', LikeController::class)
-  ->middleware(['auth', 'verified']);
+Route::resource('likes', LikeController::class, [
+  'parameters' => [
+    'likes' => 'chirp',
+  ],
+])->middleware(['auth', 'verified']);
 
 require __DIR__ . '/auth.php';

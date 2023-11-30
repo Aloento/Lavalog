@@ -14,7 +14,6 @@ class AuthServiceProvider extends ServiceProvider
    */
   protected $policies = [
     'App\Models\Chirp' => 'App\Policies\ChirpPolicy',
-    'App\Models\Like' => 'App\Policies\LikePolicy',
   ];
 
   /**

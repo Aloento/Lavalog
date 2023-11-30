@@ -1,6 +1,6 @@
 <script setup>
 import { useForm } from "@inertiajs/vue3";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import Dropdown from "@/Components/Dropdown.vue";
 import InputError from "@/Components/InputError.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
@@ -13,6 +13,41 @@ const form = useForm({
 });
 
 const editing = ref(false);
+const isLiked = ref(false);
+
+onMounted(() => {
+  axios
+    .get(`/likes/${props.chirp.id}`)
+    .then((response) => {
+      isLiked.value = response.data.isLiked;
+      console.debug(response);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+});
+
+function like() {
+  axios
+    .post(`/likes`, { chirp_id: props.chirp.id })
+    .then(() => {
+      isLiked.value = true;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}
+
+function unlike() {
+  axios
+    .delete(`/likes/${props.chirp.id}`)
+    .then(() => {
+      isLiked.value = false;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}
 </script>
 
 <template>
@@ -51,39 +86,58 @@ const editing = ref(false);
           </small>
         </div>
 
-        <Dropdown v-if="chirp.user.id === $page.props.auth.user.id">
-          <template #trigger>
-            <button>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-4 w-4 text-gray-400"
-                viewBox="0 0 20 20"
-                fill="currentColor"
+        <div class="flex gap-4">
+          <button @click="isLiked ? unlike() : like()">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6 text-red-500"
+              :fill="isLiked ? 'currentColor' : 'none'"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+              />
+            </svg>
+          </button>
+
+          <Dropdown v-if="chirp.user.id === $page.props.auth.user.id">
+            <template #trigger>
+              <button>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-4 w-4 text-gray-400"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"
+                  />
+                </svg>
+              </button>
+            </template>
+
+            <template #content>
+              <button
+                class="block w-full px-4 py-2 text-left text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:bg-gray-100 transition duration-150 ease-in-out"
+                @click="editing = true"
               >
-                <path
-                  d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"
-                />
-              </svg>
-            </button>
-          </template>
+                Edit
+              </button>
 
-          <template #content>
-            <button
-              class="block w-full px-4 py-2 text-left text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:bg-gray-100 transition duration-150 ease-in-out"
-              @click="editing = true"
-            >
-              Edit
-            </button>
-
-            <DropdownLink
-              as="button"
-              :href="route('chirps.destroy', chirp.id)"
-              method="delete"
-            >
-              Delete
-            </DropdownLink>
-          </template>
-        </Dropdown>
+              <DropdownLink
+                as="button"
+                :href="route('chirps.destroy', chirp.id)"
+                method="delete"
+              >
+                Delete
+              </DropdownLink>
+            </template>
+          </Dropdown>
+        </div>
       </div>
 
       <form
